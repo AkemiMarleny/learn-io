@@ -16,11 +16,14 @@ public class Main {
 //        SharedResource resource1 = new SharedResource();
 //
 //
-        ReaderRunner readerRunner = new ReaderRunner();
+        SharedResource sharedResource = new SharedResource();
+
+        ReaderRunner readerRunner = new ReaderRunner(sharedResource);
         Thread readerThread = new Thread(readerRunner);
         readerThread.start();
 
-        WriterRunner writerRunner = new WriterRunner();
+
+        WriterRunner writerRunner = new WriterRunner(sharedResource);
         Thread writerThread = new Thread(writerRunner);
 
         writerThread.start();

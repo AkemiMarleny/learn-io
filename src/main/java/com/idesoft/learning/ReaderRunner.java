@@ -5,9 +5,11 @@ import java.io.ByteArrayOutputStream;
 public class ReaderRunner implements Runnable {
 
     private final FileReader reader;
+    private final SharedResource sharedResource;
 
-    public ReaderRunner() {
+    public ReaderRunner(SharedResource sharedResource) {
         this.reader = new FileReader();
+        this.sharedResource = sharedResource;
     }
 
     @Override
@@ -15,7 +17,7 @@ public class ReaderRunner implements Runnable {
         try {
             System.out.println("[ReaderRunner]-start");
             // lock.
-            SharedResource.lockAll();
+            sharedResource.lockAll();
 
             System.out.println("[ReaderRunner] reading file");
             ByteArrayOutputStream contentStream = reader.read();
@@ -24,14 +26,14 @@ public class ReaderRunner implements Runnable {
             Thread.sleep(9000);
 
             System.out.println("[ReaderRunner] Writing contentStream");
-            SharedResource.setContentStream(contentStream);
+            sharedResource.setContentStream(contentStream);
         }
         catch (InterruptedException _e) {
             throw new RuntimeException(_e);
         }
         finally {
             // unlock.
-            SharedResource.unlockAll();
+            sharedResource.unlockAll();
             System.out.println("[ReaderRunner] ReaderRunner-end");
         }
     }

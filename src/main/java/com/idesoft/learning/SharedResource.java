@@ -4,40 +4,39 @@ import java.io.ByteArrayOutputStream;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class SharedResource {
-    private static ByteArrayOutputStream contentStream;
-
-    private final static ReentrantLock readLock = new ReentrantLock();
+    private ByteArrayOutputStream contentStream;
+    private final ReentrantLock readLock = new ReentrantLock();
 
 
     public SharedResource() {
 
     }
 
-    public static void lockAll() {
+    public void lockAll() {
         System.out.println("[SharedResource] Locking all");
         readLock.lock();
     }
 
-    public static void unlockAll() {
+    public void unlockAll() {
         System.out.println("[SharedResource] Unlocking all");
         readLock.unlock();
     }
 
-    public static void setContentStream(ByteArrayOutputStream contentStream) {
+    public void setContentStream(ByteArrayOutputStream contentStream) {
 
-        SharedResource.contentStream = contentStream;
+        this.contentStream = contentStream;
         // this.contentStream = contentStream; //  no exist 'THIS'
 
     }
 
-    public static ByteArrayOutputStream getContentStream() {
+    public ByteArrayOutputStream getContentStream() {
         try {
             System.out.println("[SharedResource] trying read ContentStream");
             // 1. Verifica si no hay alguien mas que haya bloqueado.
             // 2. bloquea si en 1 cumple.
             readLock.lock();
             System.out.println("[SharedResource] reading ContentStream");
-            return SharedResource.contentStream;
+            return this.contentStream;
 
         } finally {
             readLock.unlock();
