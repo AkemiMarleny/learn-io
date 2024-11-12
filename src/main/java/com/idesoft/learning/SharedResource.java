@@ -3,13 +3,20 @@ package com.idesoft.learning;
 import java.io.ByteArrayOutputStream;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SharedResource {
+public final class SharedResource {
     private ByteArrayOutputStream contentStream;
-    private final ReentrantLock readLock = new ReentrantLock();
+    private final static ReentrantLock readLock = new ReentrantLock();
 
+    private static SharedResource instance;
 
-    public SharedResource() {
+    private SharedResource() {}
 
+    public static SharedResource getInstance() {
+        if(SharedResource.instance == null)  {
+            SharedResource.instance = new SharedResource();
+        }
+
+        return SharedResource.instance;
     }
 
     public void lockAll() {
